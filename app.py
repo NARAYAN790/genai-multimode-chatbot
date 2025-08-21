@@ -1,17 +1,16 @@
 
 import streamlit as st
 import google.generativeai as genai
-
 import PyPDF2
 import io
 import os
 from fpdf import FPDF
 
 # ---------------------------
-# 0) API client (from secrets or env variable)
+# 0) API config
 # ---------------------------
 API_KEY = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY", ""))
-client = genai.Client(api_key=API_KEY)
+genai.configure(api_key=API_KEY)   # ✅ this replaces genai.Client
 
 # ---------------------------
 # 1) Page Config + Header
@@ -32,7 +31,7 @@ Here’s what you can do:
 st.divider()
 
 # ---------------------------
-# 2) Sidebar – Global controls
+# 2) Sidebar
 # ---------------------------
 mode = st.sidebar.selectbox(
     "Select Mode",
@@ -62,7 +61,6 @@ if "last_summary" not in st.session_state:
 # 3) Helpers
 # ---------------------------
 def extract_text_from_upload(file) -> str:
-    """Extract text from uploaded PDF or TXT file safely."""
     if file is None:
         return ""
     try:
@@ -83,34 +81,27 @@ def extract_text_from_upload(file) -> str:
         return f"⚠️ Error reading file: {e}"
 
 def gemini_text(prompt: str) -> str:
-    """Send prompt to Gemini API and return response."""
     try:
-        resp = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
-            contents=prompt
-        )
+        model = genai.GenerativeModel("gemini-1.5-flash")  # ✅ use GenerativeModel
+        resp = model.generate_content(prompt)
         return (resp.text or "").strip()
     except Exception as e:
         return f"⚠️ Gemini error: {e}"
 
 def make_pdf_bytes(title: str, content: str) -> bytes:
-    """Generate PDF bytes safely with latin-1 encoding (no crash)."""
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=12)
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-
     if title:
         pdf.set_font("Arial", style="B", size=14)
         safe_title = title.encode("latin-1", "replace").decode("latin-1")
         pdf.multi_cell(0, 8, safe_title)
         pdf.ln(2)
         pdf.set_font("Arial", size=12)
-
     for line in content.splitlines():
         safe_line = line.encode("latin-1", "replace").decode("latin-1")
         pdf.multi_cell(0, 6, safe_line)
-
     return pdf.output(dest="S").encode("latin-1")
 
 # ---------------------------
@@ -128,7 +119,6 @@ if mode == "Document Summarizer":
 
         col1, col2, _ = st.columns([1,1,1])
 
-        # --- Generate Summary ---
         if col1.button("✨ Generate Summary"):
             with st.spinner("Summarizing document… ⏳"):
                 summary_prompt = (
@@ -144,25 +134,13 @@ if mode == "Document Summarizer":
             st.subheader("📄 AI Summary")
             st.write(st.session_state.last_summary)
 
-            # Download buttons
             txt_bytes = st.session_state.last_summary.encode("utf-8")
-            st.download_button(
-                "⬇️ Download Summary (TXT)",
-                data=txt_bytes,
-                file_name="summary.txt",
-                mime="text/plain"
-            )
+            st.download_button("⬇️ Download Summary (TXT)", data=txt_bytes, file_name="summary.txt", mime="text/plain")
             pdf_bytes = make_pdf_bytes("Document Summary", st.session_state.last_summary)
-            st.download_button(
-                "⬇️ Download Summary (PDF)",
-                data=pdf_bytes,
-                file_name="summary.pdf",
-                mime="application/pdf"
-            )
+            st.download_button("⬇️ Download Summary (PDF)", data=pdf_bytes, file_name="summary.pdf", mime="application/pdf")
 
         st.markdown("---")
 
-        # --- Document Q&A ---
         st.subheader("❓ Ask Questions about this Document")
         q = st.text_input("Type your question (e.g., 'Is there a penalty clause?')", key="doc_q")
         ask_cols = st.columns([1,1])
@@ -171,11 +149,8 @@ if mode == "Document Summarizer":
                 with st.spinner("Reading document and answering…"):
                     qa_prompt = (
                         f"You are a helpful assistant. {tone_note}\n"
-                        "Answer **only** from the document below. "
-                        "If the answer is not present, say: 'I cannot find this in the document.'\n"
-                        f"Question: {q}\n\n"
-                        "Document:\n"
-                        f"{st.session_state.doc_text[:180000]}"
+                        "Answer **only** from the document below. If not present, say: 'I cannot find this in the document.'\n"
+                        f"Question: {q}\n\nDocument:\n{st.session_state.doc_text[:180000]}"
                     )
                     answer = gemini_text(qa_prompt)
                 st.markdown("**Answer:**")
@@ -187,7 +162,6 @@ if mode == "Document Summarizer":
             st.session_state.doc_text = ""
             st.session_state.last_summary = ""
             st.success("Cleared. Upload a new file from the sidebar.")
-
     else:
         st.info("⬅️ Upload a **PDF or TXT** from the sidebar to start.")
 
@@ -241,25 +215,12 @@ elif mode == "Summarize Mode":
             with st.spinner("Summarizing… ⏳"):
                 summary_prompt = f"Summarize this content in simple words. {tone_note}\n\n{text_to_summarize[:180000]}"
                 summary = gemini_text(summary_prompt)
-
             st.subheader("📄 AI Summary")
             st.write(summary)
-
-            # Download buttons
             txt_bytes = summary.encode("utf-8")
-            st.download_button(
-                "⬇️ Download Summary (TXT)",
-                data=txt_bytes,
-                file_name="summarize_mode_summary.txt",
-                mime="text/plain"
-            )
+            st.download_button("⬇️ Download Summary (TXT)", data=txt_bytes, file_name="summarize_mode_summary.txt", mime="text/plain")
             pdf_bytes = make_pdf_bytes("Summarize Mode Summary", summary)
-            st.download_button(
-                "⬇️ Download Summary (PDF)",
-                data=pdf_bytes,
-                file_name="summarize_mode_summary.pdf",
-                mime="application/pdf"
-            )
+            st.download_button("⬇️ Download Summary (PDF)", data=pdf_bytes, file_name="summarize_mode_summary.pdf", mime="application/pdf")
     else:
         st.info("⬅️ Upload a file OR paste some text to start summarizing.")
 
@@ -272,7 +233,6 @@ else:  # Chat Mode
         st.session_state.messages.append(("user", user_input))
         bot_response = gemini_text(f"{user_input}\n\n{tone_note}")
         st.session_state.messages.append(("bot", bot_response))
-
     for sender, msg in st.session_state.messages:
         if sender == "user":
             st.chat_message("user").write(msg)
