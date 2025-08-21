@@ -1,112 +1,279 @@
+
 import streamlit as st
 from google import genai
 import PyPDF2
 import io
+import os
+from fpdf import FPDF
 
-# Setup API key
-client = genai.Client(api_key="AIzaSyBykDv7nKmISwSbFE8a9Gh3sxMLjGigkkk")
+# ---------------------------
+# 0) API client (from secrets or env variable)
+# ---------------------------
+API_KEY = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY", ""))
+client = genai.Client(api_key=API_KEY)
 
-# Streamlit Page Config
-st.set_page_config(page_title="GenAI Multi-Mode Chatbot", layout="centered")
+# ---------------------------
+# 1) Page Config + Header
+# ---------------------------
+st.set_page_config(page_title="GenAI Hackathon – Multi-Mode Chatbot", layout="wide")
+st.title("🤖 GenAI Hackathon – Multi-Mode Chatbot")
 
-st.title("🤖 GenAI Hackathon - Multi-Mode Chatbot")
+st.markdown("""
+Welcome to *Pranay's Multi-Mode AI Chatbot* 🎉  
 
-# Chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+Here’s what you can do:
+1. 📑 **Document Summarizer** – Upload a **PDF or TXT** file → Get instant AI-generated summary.  
+2. ❓ **Document Q&A** – Ask focused questions about the uploaded document.  
+3. 🧠 **Other Modes** – Story, Motivation, Translate, and Summarize any text.  
 
-# Sidebar mode selection
+👉 Powered by **Google Gemini + Streamlit**, deployed on **Streamlit Cloud** 🚀
+""")
+st.divider()
+
+# ---------------------------
+# 2) Sidebar – Global controls
+# ---------------------------
 mode = st.sidebar.selectbox(
     "Select Mode",
-    ["Chat Mode", "Story Mode", "Motivation Mode", "Translate Mode", "Summarize Mode"]
+    [
+        "Document Summarizer",
+        "Chat Mode",
+        "Story Mode",
+        "Motivation Mode",
+        "Translate Mode",
+        "Summarize Mode"
+    ]
 )
 
-# -------------------- Document Summarizer --------------------
-st.sidebar.header("📂 Document Summarizer")
+lang = st.sidebar.selectbox("Output language", ["English", "Hindi"])
+tone_note = "Answer in simple {}.".format("English" if lang == "English" else "Hindi")
 
+st.sidebar.header("📂 Document Summarizer")
 uploaded_file = st.sidebar.file_uploader("Upload PDF or TXT file", type=["pdf", "txt"])
 
-if uploaded_file is not None:
-    if uploaded_file.type == "text/plain":
-        # If TXT file
-        text = uploaded_file.read().decode("utf-8")
-    else:
-        # If PDF file
-        pdf_reader = PyPDF2.PdfReader(uploaded_file)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text() or ""
+# Session state
+if "doc_text" not in st.session_state:
+    st.session_state.doc_text = ""
+if "last_summary" not in st.session_state:
+    st.session_state.last_summary = ""
 
-    if st.sidebar.button("Generate Summary"):
-        with st.spinner("Summarizing document... ⏳"):
-            response = client.models.generate_content(
-                model="gemini-2.5-flash-lite",
-                contents=f"Summarize this legal/complex document in very simple terms:\n{text}"
-            )
-            summary = response.text if response else "⚠️ No summary generated!"
-            st.subheader("📑 Document Summary")
-            st.write(summary)
+# ---------------------------
+# 3) Helpers
+# ---------------------------
+def extract_text_from_upload(file) -> str:
+    """Extract text from uploaded PDF or TXT file safely."""
+    if file is None:
+        return ""
+    try:
+        if file.type == "text/plain":
+            return file.read().decode("utf-8", errors="ignore")
+        elif file.type == "application/pdf":
+            reader = PyPDF2.PdfReader(file)
+            text = []
+            for i, page in enumerate(reader.pages):
+                try:
+                    text.append(page.extract_text() or "")
+                except Exception:
+                    text.append(f"[⚠️ Could not extract text from page {i+1}]")
+            return "\n".join(text)
+        else:
+            return "⚠️ Unsupported file format."
+    except Exception as e:
+        return f"⚠️ Error reading file: {e}"
 
-            # Download option
+def gemini_text(prompt: str) -> str:
+    """Send prompt to Gemini API and return response."""
+    try:
+        resp = client.models.generate_content(
+            model="gemini-2.5-flash-lite",
+            contents=prompt
+        )
+        return (resp.text or "").strip()
+    except Exception as e:
+        return f"⚠️ Gemini error: {e}"
+
+def make_pdf_bytes(title: str, content: str) -> bytes:
+    """Generate PDF bytes safely with latin-1 encoding (no crash)."""
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=12)
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    if title:
+        pdf.set_font("Arial", style="B", size=14)
+        safe_title = title.encode("latin-1", "replace").decode("latin-1")
+        pdf.multi_cell(0, 8, safe_title)
+        pdf.ln(2)
+        pdf.set_font("Arial", size=12)
+
+    for line in content.splitlines():
+        safe_line = line.encode("latin-1", "replace").decode("latin-1")
+        pdf.multi_cell(0, 6, safe_line)
+
+    return pdf.output(dest="S").encode("latin-1")
+
+# ---------------------------
+# 4) Document Summarizer + Q&A
+# ---------------------------
+if mode == "Document Summarizer":
+    st.subheader("📑 Document Summarizer")
+
+    if uploaded_file is not None:
+        st.session_state.doc_text = extract_text_from_upload(uploaded_file)
+
+    if st.session_state.doc_text:
+        with st.expander("📜 Preview extracted text (optional)", expanded=False):
+            st.text_area("Extracted text", st.session_state.doc_text[:8000], height=220)
+
+        col1, col2, _ = st.columns([1,1,1])
+
+        # --- Generate Summary ---
+        if col1.button("✨ Generate Summary"):
+            with st.spinner("Summarizing document… ⏳"):
+                summary_prompt = (
+                    f"You are a document simplifier. {tone_note}\n"
+                    "Provide a crisp, bullet-point summary with key information.\n"
+                    "If something is uncertain, say so clearly.\n\n"
+                    "Document:\n"
+                    f"{st.session_state.doc_text[:180000]}\n"
+                )
+                st.session_state.last_summary = gemini_text(summary_prompt)
+
+        if st.session_state.last_summary:
+            st.subheader("📄 AI Summary")
+            st.write(st.session_state.last_summary)
+
+            # Download buttons
+            txt_bytes = st.session_state.last_summary.encode("utf-8")
             st.download_button(
-                label="⬇️ Download Summary as TXT",
-                data=summary,
+                "⬇️ Download Summary (TXT)",
+                data=txt_bytes,
                 file_name="summary.txt",
                 mime="text/plain"
             )
+            pdf_bytes = make_pdf_bytes("Document Summary", st.session_state.last_summary)
+            st.download_button(
+                "⬇️ Download Summary (PDF)",
+                data=pdf_bytes,
+                file_name="summary.pdf",
+                mime="application/pdf"
+            )
 
-# -------------------- Image + Text Section --------------------
-st.sidebar.header("🖼️ Image + Text Input")
+        st.markdown("---")
 
-image_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-image_prompt = st.sidebar.text_input("Enter your question about the image")
+        # --- Document Q&A ---
+        st.subheader("❓ Ask Questions about this Document")
+        q = st.text_input("Type your question (e.g., 'Is there a penalty clause?')", key="doc_q")
+        ask_cols = st.columns([1,1])
+        if ask_cols[0].button("🔎 Get Answer"):
+            if q.strip():
+                with st.spinner("Reading document and answering…"):
+                    qa_prompt = (
+                        f"You are a helpful assistant. {tone_note}\n"
+                        "Answer **only** from the document below. "
+                        "If the answer is not present, say: 'I cannot find this in the document.'\n"
+                        f"Question: {q}\n\n"
+                        "Document:\n"
+                        f"{st.session_state.doc_text[:180000]}"
+                    )
+                    answer = gemini_text(qa_prompt)
+                st.markdown("**Answer:**")
+                st.write(answer)
+            else:
+                st.warning("Please type a question.")
 
-if st.sidebar.button("Analyze Image") and image_file is not None:
-    with st.spinner("Analyzing image... ⏳"):
-        # Gemini multimodal input → [text, image]
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
-            contents=[
-                {"parts": [{"text": image_prompt}]},
-                {"parts": [{"inline_data": {"mime_type": image_file.type, "data": image_file.getvalue()}}]}
-            ]
-        )
-        answer = response.text if response else "⚠️ No response generated!"
-        st.subheader("🖼️ Image Analysis Result")
-        st.write(answer)
+        if ask_cols[1].button("🧹 Reset Document"):
+            st.session_state.doc_text = ""
+            st.session_state.last_summary = ""
+            st.success("Cleared. Upload a new file from the sidebar.")
 
-# -------------------- Chat Function --------------------
-def get_response(user_input, mode):
-    if mode == "Story Mode":
-        prompt = f"Write a short, creative story about: {user_input}"
-    elif mode == "Motivation Mode":
-        prompt = f"Give a motivational message about: {user_input}"
-    elif mode == "Translate Mode":
-        prompt = f"Translate this text between English and Hindi: {user_input}"
-    elif mode == "Summarize Mode":
-        prompt = f"Summarize this text in simple words: {user_input}"
     else:
-        prompt = user_input  # default chat
+        st.info("⬅️ Upload a **PDF or TXT** from the sidebar to start.")
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash-lite",
-        contents=prompt
-    )
-    return response.text if response else "⚠️ No response received!"
+# ---------------------------
+# 5) Other Modes
+# ---------------------------
+elif mode == "Story Mode":
+    st.subheader("📖 Story Mode")
+    user_input = st.text_area("Enter a topic for your story:")
+    if st.button("✨ Generate Story"):
+        with st.spinner("Writing story…"):
+            story = gemini_text(f"Write a creative story about: {user_input}. {tone_note}")
+        st.write(story)
 
-# -------------------- Chat Input --------------------
-user_input = st.chat_input("Type your message...")
+elif mode == "Motivation Mode":
+    st.subheader("💡 Motivation Mode")
+    user_input = st.text_area("Enter a topic for motivation:")
+    if st.button("⚡ Inspire Me"):
+        with st.spinner("Generating motivation…"):
+            motivation = gemini_text(f"Give a motivational message about: {user_input}. {tone_note}")
+        st.write(motivation)
 
-if user_input:
-    st.session_state.messages.append(("user", user_input))
-    bot_response = get_response(user_input, mode)
-    st.session_state.messages.append(("bot", bot_response))
+elif mode == "Translate Mode":
+    st.subheader("🌐 Translate Mode")
+    user_input = st.text_area("Enter text to translate:")
+    if st.button("🌍 Translate"):
+        with st.spinner("Translating…"):
+            translate = gemini_text(
+                "Translate the following text between English and Hindi. "
+                "If it's English, translate to Hindi; if it's Hindi, translate to English.\n\n"
+                f"{user_input}"
+            )
+        st.write(translate)
 
-# -------------------- Display Chat History --------------------
-for sender, msg in st.session_state.messages:
-    if sender == "user":
-        st.chat_message("user").write(msg)
+elif mode == "Summarize Mode":
+    st.subheader("📝 Summarize Mode")
+    uploaded_file = st.file_uploader("Upload PDF or TXT file to summarize", type=["pdf", "txt"])
+    input_text = st.text_area("Or paste text here", height=180)
+
+    text_to_summarize = ""
+    if uploaded_file:
+        st.info("📂 File uploaded. Extracting text…")
+        text_to_summarize = extract_text_from_upload(uploaded_file)
+        with st.expander("📜 Preview extracted text (optional)", expanded=False):
+            st.text_area("Extracted text", text_to_summarize[:8000], height=220)
+    elif input_text.strip():
+        text_to_summarize = input_text.strip()
+
+    if text_to_summarize:
+        if st.button("✨ Summarize Now"):
+            with st.spinner("Summarizing… ⏳"):
+                summary_prompt = f"Summarize this content in simple words. {tone_note}\n\n{text_to_summarize[:180000]}"
+                summary = gemini_text(summary_prompt)
+
+            st.subheader("📄 AI Summary")
+            st.write(summary)
+
+            # Download buttons
+            txt_bytes = summary.encode("utf-8")
+            st.download_button(
+                "⬇️ Download Summary (TXT)",
+                data=txt_bytes,
+                file_name="summarize_mode_summary.txt",
+                mime="text/plain"
+            )
+            pdf_bytes = make_pdf_bytes("Summarize Mode Summary", summary)
+            st.download_button(
+                "⬇️ Download Summary (PDF)",
+                data=pdf_bytes,
+                file_name="summarize_mode_summary.pdf",
+                mime="application/pdf"
+            )
     else:
-        st.chat_message("assistant").write(msg)
+        st.info("⬅️ Upload a file OR paste some text to start summarizing.")
 
+else:  # Chat Mode
+    st.subheader("💬 Chat Mode")
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    user_input = st.chat_input("Type your message...")
+    if user_input:
+        st.session_state.messages.append(("user", user_input))
+        bot_response = gemini_text(f"{user_input}\n\n{tone_note}")
+        st.session_state.messages.append(("bot", bot_response))
 
+    for sender, msg in st.session_state.messages:
+        if sender == "user":
+            st.chat_message("user").write(msg)
+        else:
+            st.chat_message("assistant").write(msg)
