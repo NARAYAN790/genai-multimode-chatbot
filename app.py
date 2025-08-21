@@ -1,6 +1,7 @@
 
 import streamlit as st
-from google import genai
+import google.generativeai as genai
+
 import PyPDF2
 import io
 import os
