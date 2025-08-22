@@ -1,238 +1,96 @@
 
 
+# ⚖️ Generative AI for Demystifying Legal Documents
 
+A GenAI Hackathon Project built with Google Gemini API + Streamlit
 
-\# 🤖 GenAI Multi-Mode Chatbot
+## 🚨 Problem Statement
 
+Legal documents—like rental agreements, loan contracts, or terms of service—are packed with jargon that’s hard to understand. This creates risk: people often agree to terms they don’t fully grasp.
 
+## 💡 Our Solution
 
-A \*\*GenAI Hackathon Project\*\* built with \*\*Google Gemini API + Streamlit\*\*.  
+We built an AI-powered assistant that simplifies legal documents into clear, accessible language. Users can:
 
-This chatbot provides \*\*multi-mode AI interactions\*\* such as \*\*Document Summarization, Q\&A, Storytelling, Motivation, Translation, and Free Chat Mode\*\*.  
+- Upload contracts or agreements.
+- Get plain-language summaries of key points.
+- Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”).
+- Export results to PDF/TXT for easy reference.
 
-It is designed to help users quickly analyze PDF/TXT documents and interact with them using natural language.
+This empowers everyday citizens and small businesses to make informed decisions and avoid hidden risks.
 
+## ✨ Core Features
 
+- 📑 **Document Summarizer** → Upload PDF/TXT, get simplified summaries.
+- ❓ **Document Q&A** → Ask questions about clauses, receive clear explanations.
+- ⬇️ **Export Options** → Save outputs as TXT/PDF.
 
----
+### Bonus Features (beyond hackathon scope)
+- 📖 Story Mode
+- 💡 Motivation Mode
+- 🌐 Translate Mode (English ↔ Hindi)
+- 📝 Summarize Any Text
+- 💬 Free Chat Mode
 
+## 🛠️ Tech Stack
 
+- [Streamlit](https://streamlit.io/) → UI Framework
+- [Google Gemini API](https://ai.google.dev/) → AI backend
+- [PyPDF2](https://pypi.org/project/PyPDF2/) → PDF text extraction
+- [FPDF](https://pyfpdf.readthedocs.io/) → Export to PDF
+- Python 3.10+
 
-\## ✨ Features
+## 🚀 How to Run Locally
+```bash
+git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
+cd genai-multimode-chatbot
 
-
-
-\- 📑 \*\*Document Summarizer\*\* → Upload PDF/TXT files, get AI-generated summaries.  
-
-\- ❓ \*\*Document Q\&A\*\* → Ask specific questions about uploaded documents.  
-
-\- 📖 \*\*Story Mode\*\* → Generate creative AI-powered stories.  
-
-\- 💡 \*\*Motivation Mode\*\* → Get motivational messages based on your topic.  
-
-\- 🌐 \*\*Translate Mode\*\* → Translate between \*\*English ↔ Hindi\*\*.  
-
-\- 📝 \*\*Summarize Any Text\*\* → Paste any text and get an instant summary.  
-
-\- 💬 \*\*Chat Mode\*\* → General AI assistant chat.  
-
-\- ⬇️ \*\*Export Options\*\* → Download results in \*\*TXT/PDF\*\* formats.
-
-
-
----
-
-
-
-\## 🛠️ Tech Stack
-
-
-
-\- \[Streamlit](https://streamlit.io/) → UI Framework  
-
-\- \[Google Gemini API](https://ai.google.dev/) → AI/LLM backend  
-
-\- \[PyPDF2](https://pypi.org/project/PyPDF2/) → PDF text extraction  
-
-\- \[FPDF](https://pyfpdf.readthedocs.io/) → Export summaries to PDF  
-
-\- Python 3.10+  
-
-
-
----
-
-
-
-\## 📂 Project Structure
-
-
-
-
-
-
-
-Pranay\_Project/
-
-│-- app.py # Main Streamlit app
-
-│-- requirements.txt # Dependencies
-
-│-- README.md # Documentation
-
-│-- .gitignore # Git ignore rules
-
-│-- .streamlit/
-
-│ └── secrets.toml # API Key (Not committed to GitHub)
-
-
-
-
-
----
-
-
-
-\## 🚀 How to Run Locally
-
-
-
-1\. Clone the repo:
-
-&nbsp;  ```bash
-
-&nbsp;  git clone https://github.com/your-username/genai-multimode-chatbot.git
-
-&nbsp;  cd genai-multimode-chatbot
-
-
-
-
-
-Create \& activate virtual environment:
-
-
-
+# Create & activate virtual environment
 python -m venv venv
+venv\Scripts\activate   # Windows
+source venv/bin/activate  # Mac/Linux
 
-venv\\Scripts\\activate   # On Windows
-
-source venv/bin/activate   # On Mac/Linux
-
-
-
-
-
-Install dependencies:
-
-
-
+# Install dependencies
 pip install -r requirements.txt
+```
 
-
-
-
-
-Add your Gemini API key in .streamlit/secrets.toml:
-
-
-
-GEMINI\_API\_KEY = "your-api-key-here"
-
-
-
-
+Add your Gemini API key in `.streamlit/secrets.toml`:
+```toml
+GEMINI_API_KEY = "your-api-key-here"
+```
 
 Run the app:
-
-
-
+```bash
 streamlit run app.py
+```
 
+## 🌐 Live Demo
 
+👉 [Try the App Here](https://pranay-ai-assistant.streamlit.app/)
 
-🌐 Deployment (Streamlit Cloud)
+## 🧭 Judge Walkthrough
 
+1. **Upload** a rental agreement (PDF/TXT).
+2. **View** a simplified summary in plain language.
+3. **Ask**: “What is the penalty clause?” → Get clear explanation.
+4. **Export** the results as PDF/TXT.
 
+*(Bonus: Try Story, Motivation, or Translate modes to see extensibility.)*
 
-Push your repo to GitHub.
+## 📸 Screenshots
 
+- 🔹 Document Summarizer
+- 🔹 Q&A Mode
 
+## 👨‍💻 Author
 
-Go to Streamlit Cloud
+**Narayan Gupta**  
+🎓 B.Tech in Electronics & Communication, Dr. A.I.T.D Kanpur  
+💡 Interests: AI, NLP, Data Science, Generative AI  
 
-&nbsp;→ Deploy new app.
+🌐 LinkedIn | GitHub
 
+## 🏆 Acknowledgements
 
-
-Connect GitHub repo → Select app.py.
-
-
-
-In Secrets Manager, add:
-
-
-
-GEMINI\_API\_KEY = "your-api-key-here"
-
-
-
-
-
-Deploy 🚀
-
-
-
-📸 Screenshots
-
-🔹 Document Summarizer
-
-
-
-🔹 Chat Mode
-
-
-
-👨‍💻 Author
-
-
-
-Narayan Gupta
-
-
-
-🎓 B.Tech in Electronics \& Communication, Dr. A.I.T.D Kanpur
-
-
-
-💡 Interests: AI, NLP, Data Science, Generative AI
-
-
-
-🌐 LinkedIn
-
-&nbsp;| GitHub
-
-
-
-🏆 Acknowledgements
-
-
-
-Hackathon by Google \& Hack2Skill
-
-
-
-Powered by Gemini API + Streamlit
-
-
-
-
-
----
-
-
-
-
-
+Hackathon by Google & Hack2Skill  
+Powered by **Gemini API + Streamlit**
