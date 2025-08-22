@@ -1,5 +1,3 @@
-
-
 # ⚖️ Generative AI for Demystifying Legal Documents
 
 A GenAI Hackathon Project built with Google Gemini API + Streamlit
@@ -77,10 +75,13 @@ streamlit run app.py
 
 *(Bonus: Try Story, Motivation, or Translate modes to see extensibility.)*
 
-## 📸 Screenshots
+## 📸 Screenshots  
 
-- 🔹 Document Summarizer
-- 🔹 Q&A Mode
+🔹 Document Summarizer  
+![Document Summarizer Screenshot](https://via.placeholder.com/600x350.png?text=Document+Summarizer+Screenshot)  
+
+🔹 Q&A Mode  
+![Q&A Screenshot](https://via.placeholder.com/600x350.png?text=Q%26A+Screenshot)  
 
 ## 👨‍💻 Author
 
@@ -94,3 +95,4 @@ streamlit run app.py
 
 Hackathon by Google & Hack2Skill  
 Powered by **Gemini API + Streamlit**
+
