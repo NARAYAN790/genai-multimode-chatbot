@@ -1,45 +1,61 @@
-# ⚖️ Generative AI for Demystifying Legal Documents
+⚖️ GenAI Legal Document Assistant
 
-A GenAI Hackathon Project built with Google Gemini API + Streamlit
+A Generative AI Hackathon Project built with Google Gemini API + Streamlit
 
-## 🚨 Problem Statement
+🚨 Problem
 
-Legal documents—like rental agreements, loan contracts, or terms of service—are packed with jargon that’s hard to understand. This creates risk: people often agree to terms they don’t fully grasp.
+Legal documents — rental agreements, loan contracts, terms of service — are full of jargon and complexity.
+Most people sign without fully understanding the terms, creating risk and confusion.
 
-## 💡 Our Solution
+💡 Our Solution
 
-We built an AI-powered assistant that simplifies legal documents into clear, accessible language. Users can:
+We built an AI-powered assistant that transforms complex legal documents into clear, plain language.
 
-- Upload contracts or agreements.
-- Get plain-language summaries of key points.
-- Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”).
-- Export results to PDF/TXT for easy reference.
+With our app, users can:
 
-This empowers everyday citizens and small businesses to make informed decisions and avoid hidden risks.
+📂 Upload contracts or agreements (PDF/TXT).
 
-## ✨ Core Features
+📑 Get plain-language summaries of key points.
 
-- 📑 **Document Summarizer** → Upload PDF/TXT, get simplified summaries.
-- ❓ **Document Q&A** → Ask questions about clauses, receive clear explanations.
-- ⬇️ **Export Options** → Save outputs as TXT/PDF.
+❓ Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”).
 
-### Bonus Features (beyond hackathon scope)
-- 📖 Story Mode
-- 💡 Motivation Mode
-- 🌐 Translate Mode (English ↔ Hindi)
-- 📝 Summarize Any Text
-- 💬 Free Chat Mode
+⬇️ Export results to TXT/PDF for easy reference.
 
-## 🛠️ Tech Stack
+👉 This empowers individuals and small businesses to make informed decisions and avoid hidden risks.
 
-- [Streamlit](https://streamlit.io/) → UI Framework
-- [Google Gemini API](https://ai.google.dev/) → AI backend
-- [PyPDF2](https://pypi.org/project/PyPDF2/) → PDF text extraction
-- [FPDF](https://pyfpdf.readthedocs.io/) → Export to PDF
-- Python 3.10+
+✨ Core Features
 
-## 🚀 How to Run Locally
-```bash
+📑 Document Summarizer → Upload PDF/TXT, get simplified summaries.
+
+❓ Document Q&A → Ask questions about clauses, receive clear answers.
+
+⬇️ Export Options → Save outputs as TXT/PDF.
+
+Bonus Features (beyond hackathon scope):
+
+📖 Story Mode
+
+💡 Motivation Mode
+
+🌐 Translate (English ↔ Hindi)
+
+📝 Summarize Any Text
+
+💬 Free Chat Mode
+
+🛠️ Tech Stack
+
+Streamlit → UI framework
+
+Google Gemini API → AI backend
+
+PyPDF2 → PDF text extraction
+
+FPDF → Export to PDF
+
+Python 3.10+
+
+🚀 Run Locally
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
 cd genai-multimode-chatbot
 
@@ -50,49 +66,47 @@ source venv/bin/activate  # Mac/Linux
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-Add your Gemini API key in `.streamlit/secrets.toml`:
-```toml
+
+Add your Gemini API key in .streamlit/secrets.toml
+
 GEMINI_API_KEY = "your-api-key-here"
-```
+
 
 Run the app:
-```bash
+
 streamlit run app.py
-```
 
-## 🌐 Live Demo
+🌐 Live Demo
 
-👉 [Try the App Here](https://pranay-ai-assistant.streamlit.app/)
+👉 Try the App Here
+ (Insert live Streamlit link)
 
-## 🧭 Judge Walkthrough
+🧭 Judge Walkthrough
 
-1. **Upload** a rental agreement (PDF/TXT).
-2. **View** a simplified summary in plain language.
-3. **Ask**: “What is the penalty clause?” → Get clear explanation.
-4. **Export** the results as PDF/TXT.
+Upload a rental agreement (PDF/TXT).
 
-*(Bonus: Try Story, Motivation, or Translate modes to see extensibility.)*
+View the simplified summary.
 
-## 📸 Screenshots  
+Ask: “What is the penalty clause?” → Get a clear explanation.
 
-🔹 Document Summarizer  
-![Document Summarizer Screenshot](https://via.placeholder.com/600x350.png?text=Document+Summarizer+Screenshot)  
+Export results as TXT/PDF.
 
-🔹 Q&A Mode  
-![Q&A Screenshot](https://via.placeholder.com/600x350.png?text=Q%26A+Screenshot)  
+(Optional) Explore Story, Motivation, or Translate modes.
 
-## 👨‍💻 Author
+📸 Screenshots
 
-**Narayan Gupta**  
-🎓 B.Tech in Electronics & Communication, Dr. A.I.T.D Kanpur  
-💡 Interests: AI, NLP, Data Science, Generative AI  
+🔹 Document Summarizer
+(Insert screenshot here)
 
-🌐 LinkedIn | GitHub
+🔹 Q&A Mode
+(Insert screenshot here)
 
-## 🏆 Acknowledgements
+👨‍💻 Author
 
-Hackathon by Google & Hack2Skill  
-Powered by **Gemini API + Streamlit**
+Narayan Gupta
+🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
+💡 Interests: AI, NLP, Generative AI
 
+🌐 LinkedIn
+ | GitHub
