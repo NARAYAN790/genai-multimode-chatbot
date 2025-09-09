@@ -71,30 +71,24 @@ bash
 Copy code
 streamlit run app.py
 🌐 Live Demo
-👉 Try the App Here
+👉 Try the App Here: Live Demo
 
 🧭 Judge Walkthrough
 Upload a rental agreement (PDF/TXT).
-
 View the simplified summary.
-
 Ask: “What is the penalty clause?” — Get a clear explanation.
-
 Export results as TXT/PDF.
-
 (Optional) Explore Story, Motivation, or Translate modes.
 
 📸 Screenshots
 🔹 Document Summarizer
 🔹 Q&A Mode
-
 (Replace with actual screenshots before submission)
 
 👨‍💻 Author
 Narayan Gupta
 🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
 💡 Interests: AI, NLP, Generative AI
-
 🌐 LinkedIn | GitHub
 
 🏆 Acknowledgements
