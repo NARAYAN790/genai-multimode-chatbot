@@ -1,5 +1,4 @@
-# ⚖️ GenAI Legal Document Assistant
-
+⚖️ GenAI Legal Document Assistant
 *A Generative AI Hackathon Project built with Google Gemini API + Streamlit*
 
 ---
@@ -33,7 +32,7 @@ With our app, users can:
 - 💡 Motivation Mode  
 - 🌐 Translate (English ↔ Hindi)  
 - 📝 Summarize Any Text  
-- 💬 Free Chat Mode  
+- 💬 Free Chat Mode
 
 ---
 
@@ -42,23 +41,26 @@ With our app, users can:
 - Google Gemini API → AI backend  
 - PyPDF2 → PDF text extraction  
 - FPDF → Export to PDF  
-- Python 3.10+  
+- Python 3.10+
 
 ---
 
 ## 🚀 Run Locally
 ```bash
+# Clone the repository
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
 cd genai-multimode-chatbot
 
 # Create & activate virtual environment
 python -m venv venv
-venv\Scripts\activate   # Windows
-source venv/bin/activate  # Mac/Linux
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
-Add your Gemini API key in .streamlit/secrets.toml
+Add your Gemini API key in .streamlit/secrets.toml:
 
 toml
 Copy code
@@ -84,7 +86,6 @@ Export results as TXT/PDF.
 
 📸 Screenshots
 🔹 Document Summarizer
-
 🔹 Q&A Mode
 
 (Replace with actual screenshots before submission)
