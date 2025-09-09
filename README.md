@@ -1,58 +1,60 @@
-⚖️ Generative AI for Demystifying Legal Documents
+⚖️ GenAI Legal Document Assistant
 
-A GenAI Hackathon Project built with Google Gemini API + Streamlit
+A Generative AI Hackathon Project built with Google Gemini API + Streamlit
 
-🚨 Problem Statement
+---
 
-Legal documents—like rental agreements, loan contracts, or terms of service—are full of complex jargon. Most people agree to these terms without fully understanding them, creating risk and potential legal issues.
+## 🚨 Problem
 
-💡 Our Solution
+Legal documents — rental agreements, loan contracts, terms of service — are full of jargon and complexity.  
+Most people sign without fully understanding the terms, creating risk and confusion.
 
-We built an AI-powered assistant that transforms legal documents into clear, accessible language. Users can:
+---
 
-Upload contracts or agreements
+## 💡 Our Solution
 
-Get plain-language summaries of key points
+We built an AI-powered assistant that transforms complex legal documents into clear, plain language.  
 
-Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”)
+With our app, users can:
 
-Export results to PDF or TXT for easy reference
+- 📂 **Upload contracts or agreements** (PDF/TXT)  
+- 📑 **Get plain-language summaries** of key points  
+- ❓ **Ask specific questions** (e.g., “What’s the penalty clause if I break the lease?”)  
+- ⬇️ **Export results** to TXT/PDF for easy reference  
 
-This empowers everyday citizens and small businesses to make informed decisions and avoid hidden risks.
+This empowers individuals and small businesses to make informed decisions and avoid hidden risks.
 
-✨ Core Features
+---
 
-📑 Document Summarizer → Upload PDF/TXT, receive simplified summaries.
+## ✨ Core Features
 
-❓ Document Q&A → Ask questions about clauses and get clear explanations.
+- 📑 **Document Summarizer** → Upload PDF/TXT, get simplified summaries  
+- ❓ **Document Q&A** → Ask questions about clauses, receive clear answers  
+- ⬇️ **Export Options** → Save outputs as TXT/PDF  
 
-⬇️ Export Options → Save outputs as TXT or PDF.
+**Bonus Features (beyond hackathon scope):**  
 
-Bonus Features (beyond hackathon scope):
+- 📖 Story Mode  
+- 💡 Motivation Mode  
+- 🌐 Translate Mode (English ↔ Hindi)  
+- 📝 Summarize Any Text  
+- 💬 Free Chat Mode  
 
-📖 Story Mode
+---
 
-💡 Motivation Mode
+## 🛠️ Tech Stack
 
-🌐 Translate Mode (English ↔ Hindi)
+- **Streamlit** → UI framework  
+- **Google Gemini API** → AI backend  
+- **PyPDF2** → PDF text extraction  
+- **FPDF** → Export to PDF  
+- **Python 3.10+**
 
-📝 Summarize Any Text
+---
 
-💬 Free Chat Mode
+## 🚀 Run Locally
 
-🛠️ Tech Stack
-
-Streamlit → UI Framework
-
-Google Gemini API → AI backend
-
-PyPDF2 → PDF text extraction
-
-FPDF → Export to PDF
-
-Python 3.10+
-
-🚀 How to Run Locally
+```bash
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
 cd genai-multimode-chatbot
 
@@ -63,50 +65,44 @@ source venv/bin/activate  # Mac/Linux
 
 # Install dependencies
 pip install -r requirements.txt
-
-
 Add your Gemini API key in .streamlit/secrets.toml:
 
+toml
+Copy code
 GEMINI_API_KEY = "your-api-key-here"
-
-
 Run the app:
 
+bash
+Copy code
 streamlit run app.py
-
 🌐 Live Demo
-
 👉 Try the App Here
 
 🧭 Judge Walkthrough
+Upload a rental agreement (PDF/TXT)
 
-Upload a rental agreement (PDF/TXT).
+View the simplified summary
 
-View a simplified summary in plain language.
+Ask: “What is the penalty clause?” → Get a clear explanation
 
-Ask: “What is the penalty clause?” → Get a clear explanation.
+Export results as TXT/PDF
 
-Export the results as PDF/TXT.
-
-(Bonus) Explore Story, Motivation, or Translate modes to see the app’s extensibility.
+(Optional) Explore Story, Motivation, or Translate modes
 
 📸 Screenshots
+🔹 Document Summarizer
+Insert screenshot here
 
-Document Summarizer
-
-Q&A Mode
+🔹 Q&A Mode
+Insert screenshot here
 
 👨‍💻 Author
-
 Narayan Gupta
-🎓 B.Tech in Electronics & Communication, Dr. A.I.T.D Kanpur
-💡 Interests: AI, NLP, Data Science, Generative AI
+🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
+💡 Interests: AI, NLP, Generative AI
 
-LinkedIn
-
-GitHub
+🌐 LinkedIn | GitHub
 
 🏆 Acknowledgements
-
 Hackathon by Google & Hack2Skill
-Powered by Google Gemini API + Streamlit
+Powered by Gemini API + Streamlit
