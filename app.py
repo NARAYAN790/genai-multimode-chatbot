@@ -1,4 +1,3 @@
-
 import streamlit as st
 import google.generativeai as genai
 import PyPDF2
@@ -10,7 +9,7 @@ from fpdf import FPDF
 # 0) API config
 # ---------------------------
 API_KEY = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY", ""))
-genai.configure(api_key=API_KEY)   # ✅ this replaces genai.Client
+genai.configure(api_key=API_KEY)
 
 # ---------------------------
 # 1) Page Config + Header
@@ -82,7 +81,7 @@ def extract_text_from_upload(file) -> str:
 
 def gemini_text(prompt: str) -> str:
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")  # ✅ use GenerativeModel
+        model = genai.GenerativeModel("gemini-1.5-flash")
         resp = model.generate_content(prompt)
         return (resp.text or "").strip()
     except Exception as e:
@@ -103,6 +102,15 @@ def make_pdf_bytes(title: str, content: str) -> bytes:
         safe_line = line.encode("latin-1", "replace").decode("latin-1")
         pdf.multi_cell(0, 6, safe_line)
     return pdf.output(dest="S").encode("latin-1")
+
+def split_text_into_chunks(text, chunk_size=1200, overlap=200):
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunks.append(text[start:end])
+        start += chunk_size - overlap
+    return chunks
 
 # ---------------------------
 # 4) Document Summarizer + Q&A
@@ -146,11 +154,15 @@ if mode == "Document Summarizer":
         ask_cols = st.columns([1,1])
         if ask_cols[0].button("🔎 Get Answer"):
             if q.strip():
-                with st.spinner("Reading document and answering…"):
+                with st.spinner("Searching document and answering…"):
+                    chunks = split_text_into_chunks(st.session_state.doc_text)
+                    # Simple relevance: pick the chunk with most keyword overlap
+                    relevant_chunk = max(chunks, key=lambda c: sum(1 for word in q.lower().split() if word in c.lower()))
                     qa_prompt = (
                         f"You are a helpful assistant. {tone_note}\n"
-                        "Answer **only** from the document below. If not present, say: 'I cannot find this in the document.'\n"
-                        f"Question: {q}\n\nDocument:\n{st.session_state.doc_text[:180000]}"
+                        "Answer **only** from the document chunk below. "
+                        "If not present, say: 'I cannot find this in the document.'\n"
+                        f"Question: {q}\n\nDocument Chunk:\n{relevant_chunk}"
                     )
                     answer = gemini_text(qa_prompt)
                 st.markdown("**Answer:**")
@@ -166,7 +178,7 @@ if mode == "Document Summarizer":
         st.info("⬅️ Upload a **PDF or TXT** from the sidebar to start.")
 
 # ---------------------------
-# 5) Other Modes
+# 5) Other Modes (unchanged)
 # ---------------------------
 elif mode == "Story Mode":
     st.subheader("📖 Story Mode")
@@ -238,3 +250,4 @@ else:  # Chat Mode
             st.chat_message("user").write(msg)
         else:
             st.chat_message("assistant").write(msg)
+
