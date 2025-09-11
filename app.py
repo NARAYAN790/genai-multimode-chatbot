@@ -1,7 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
 import PyPDF2
-import io
 import os
 from fpdf import FPDF
 
@@ -50,14 +49,16 @@ tone_note = "Answer in simple {}.".format("English" if lang == "English" else "H
 st.sidebar.header("📂 Document Summarizer")
 uploaded_file = st.sidebar.file_uploader("Upload PDF or TXT file", type=["pdf", "txt"])
 
-# Session state
+# ---------------------------
+# 3) Session state
+# ---------------------------
 if "doc_text" not in st.session_state:
     st.session_state.doc_text = ""
 if "last_summary" not in st.session_state:
     st.session_state.last_summary = ""
 
 # ---------------------------
-# 3) Helpers
+# 4) Helpers
 # ---------------------------
 def extract_text_from_upload(file) -> str:
     if file is None:
@@ -113,7 +114,7 @@ def split_text_into_chunks(text, chunk_size=1200, overlap=200):
     return chunks
 
 # ---------------------------
-# 4) Document Summarizer + Q&A
+# 5) Document Summarizer + Q&A
 # ---------------------------
 if mode == "Document Summarizer":
     st.subheader("📑 Document Summarizer")
@@ -127,16 +128,18 @@ if mode == "Document Summarizer":
 
         col1, col2, _ = st.columns([1,1,1])
 
+        # Optimized summary: chunk-wise
         if col1.button("✨ Generate Summary"):
             with st.spinner("Summarizing document… ⏳"):
-                summary_prompt = (
-                    f"You are a document simplifier. {tone_note}\n"
-                    "Provide a crisp, bullet-point summary with key information.\n"
-                    "If something is uncertain, say so clearly.\n\n"
-                    "Document:\n"
-                    f"{st.session_state.doc_text[:180000]}\n"
-                )
-                st.session_state.last_summary = gemini_text(summary_prompt)
+                chunks = split_text_into_chunks(st.session_state.doc_text, chunk_size=1200, overlap=200)
+                partial_summaries = []
+                for i, ch in enumerate(chunks):
+                    prompt = f"You are a document simplifier. {tone_note}\nSummarize clearly:\n\n{ch}"
+                    partial_summaries.append(gemini_text(prompt))
+
+                combined_text = "\n".join(partial_summaries)
+                final_prompt = f"Combine the following partial summaries into a crisp overall summary:\n\n{combined_text}"
+                st.session_state.last_summary = gemini_text(final_prompt)
 
         if st.session_state.last_summary:
             st.subheader("📄 AI Summary")
@@ -149,6 +152,7 @@ if mode == "Document Summarizer":
 
         st.markdown("---")
 
+        # Optimized Q&A: chunk relevance
         st.subheader("❓ Ask Questions about this Document")
         q = st.text_input("Type your question (e.g., 'Is there a penalty clause?')", key="doc_q")
         ask_cols = st.columns([1,1])
@@ -156,7 +160,6 @@ if mode == "Document Summarizer":
             if q.strip():
                 with st.spinner("Searching document and answering…"):
                     chunks = split_text_into_chunks(st.session_state.doc_text)
-                    # Simple relevance: pick the chunk with most keyword overlap
                     relevant_chunk = max(chunks, key=lambda c: sum(1 for word in q.lower().split() if word in c.lower()))
                     qa_prompt = (
                         f"You are a helpful assistant. {tone_note}\n"
@@ -178,7 +181,7 @@ if mode == "Document Summarizer":
         st.info("⬅️ Upload a **PDF or TXT** from the sidebar to start.")
 
 # ---------------------------
-# 5) Other Modes (unchanged)
+# 6) Other Modes (unchanged)
 # ---------------------------
 elif mode == "Story Mode":
     st.subheader("📖 Story Mode")
@@ -225,13 +228,17 @@ elif mode == "Summarize Mode":
     if text_to_summarize:
         if st.button("✨ Summarize Now"):
             with st.spinner("Summarizing… ⏳"):
-                summary_prompt = f"Summarize this content in simple words. {tone_note}\n\n{text_to_summarize[:180000]}"
-                summary = gemini_text(summary_prompt)
+                chunks = split_text_into_chunks(text_to_summarize, chunk_size=1200, overlap=200)
+                partial_summaries = []
+                for ch in chunks:
+                    partial_summaries.append(gemini_text(f"Summarize clearly:\n\n{ch}"))
+                combined = "\n".join(partial_summaries)
+                final_summary = gemini_text(f"Combine the following into a crisp summary:\n\n{combined}")
             st.subheader("📄 AI Summary")
-            st.write(summary)
-            txt_bytes = summary.encode("utf-8")
+            st.write(final_summary)
+            txt_bytes = final_summary.encode("utf-8")
             st.download_button("⬇️ Download Summary (TXT)", data=txt_bytes, file_name="summarize_mode_summary.txt", mime="text/plain")
-            pdf_bytes = make_pdf_bytes("Summarize Mode Summary", summary)
+            pdf_bytes = make_pdf_bytes("Summarize Mode Summary", final_summary)
             st.download_button("⬇️ Download Summary (PDF)", data=pdf_bytes, file_name="summarize_mode_summary.pdf", mime="application/pdf")
     else:
         st.info("⬅️ Upload a file OR paste some text to start summarizing.")
