@@ -128,18 +128,18 @@ if mode == "Document Summarizer":
 
         col1, col2, _ = st.columns([1,1,1])
 
-        # Optimized summary: chunk-wise
+        # Hybrid summary: small docs (single call) vs large docs (chunk)
         if col1.button("✨ Generate Summary"):
             with st.spinner("Summarizing document… ⏳"):
-                chunks = split_text_into_chunks(st.session_state.doc_text, chunk_size=1200, overlap=200)
-                partial_summaries = []
-                for i, ch in enumerate(chunks):
-                    prompt = f"You are a document simplifier. {tone_note}\nSummarize clearly:\n\n{ch}"
-                    partial_summaries.append(gemini_text(prompt))
-
-                combined_text = "\n".join(partial_summaries)
-                final_prompt = f"Combine the following partial summaries into a crisp overall summary:\n\n{combined_text}"
-                st.session_state.last_summary = gemini_text(final_prompt)
+                doc_text = st.session_state.doc_text
+                if len(doc_text) < 5000:  # small docs → direct summary
+                    prompt = f"Summarize this in 5–7 bullet points. {tone_note}\n\n{doc_text}"
+                    st.session_state.last_summary = gemini_text(prompt)
+                else:  # large docs → chunking
+                    chunks = split_text_into_chunks(doc_text, chunk_size=1200, overlap=200)
+                    partial_summaries = [gemini_text(f"Summarize briefly:\n\n{ch}") for ch in chunks]
+                    combined_text = "\n".join(partial_summaries)
+                    st.session_state.last_summary = gemini_text(f"Combine into a crisp overall summary:\n\n{combined_text}")
 
         if st.session_state.last_summary:
             st.subheader("📄 AI Summary")
@@ -228,17 +228,19 @@ elif mode == "Summarize Mode":
     if text_to_summarize:
         if st.button("✨ Summarize Now"):
             with st.spinner("Summarizing… ⏳"):
-                chunks = split_text_into_chunks(text_to_summarize, chunk_size=1200, overlap=200)
-                partial_summaries = []
-                for ch in chunks:
-                    partial_summaries.append(gemini_text(f"Summarize clearly:\n\n{ch}"))
-                combined = "\n".join(partial_summaries)
-                final_summary = gemini_text(f"Combine the following into a crisp summary:\n\n{combined}")
+                if len(text_to_summarize) < 5000:
+                    summary_prompt = f"Summarize this content in 5–7 bullet points. {tone_note}\n\n{text_to_summarize}"
+                    summary = gemini_text(summary_prompt)
+                else:
+                    chunks = split_text_into_chunks(text_to_summarize, chunk_size=1200, overlap=200)
+                    partial_summaries = [gemini_text(f"Summarize briefly:\n\n{ch}") for ch in chunks]
+                    combined = "\n".join(partial_summaries)
+                    summary = gemini_text(f"Combine into a crisp summary:\n\n{combined}")
             st.subheader("📄 AI Summary")
-            st.write(final_summary)
-            txt_bytes = final_summary.encode("utf-8")
+            st.write(summary)
+            txt_bytes = summary.encode("utf-8")
             st.download_button("⬇️ Download Summary (TXT)", data=txt_bytes, file_name="summarize_mode_summary.txt", mime="text/plain")
-            pdf_bytes = make_pdf_bytes("Summarize Mode Summary", final_summary)
+            pdf_bytes = make_pdf_bytes("Summarize Mode Summary", summary)
             st.download_button("⬇️ Download Summary (PDF)", data=pdf_bytes, file_name="summarize_mode_summary.pdf", mime="application/pdf")
     else:
         st.info("⬅️ Upload a file OR paste some text to start summarizing.")
@@ -257,4 +259,5 @@ else:  # Chat Mode
             st.chat_message("user").write(msg)
         else:
             st.chat_message("assistant").write(msg)
+
 
