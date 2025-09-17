@@ -4,12 +4,12 @@ A GenAI Hackathon Project built with Google Gemini API + Streamlit
 
 🚨 Problem Statement
 
-Legal documents — rental agreements, loan contracts, terms of service — are full of complex jargon.
-Most people sign them without fully understanding the terms, creating risk and potential legal issues for individuals and small businesses.
+Legal documents — rental agreements, loan contracts, terms of service — are often full of jargon and complexity.
+Most people sign without fully understanding the terms, creating risk and confusion.
 
 💡 Our Solution
 
-We built an AI-powered assistant that transforms legal documents into clear, plain language.
+We built an AI-powered assistant that transforms complex legal documents into clear, plain language.
 
 Users can:
 
@@ -26,7 +26,7 @@ This helps everyday users make informed decisions and avoid hidden risks.
 ❓ Document Q&A → Ask questions about clauses, receive clear answers
 ⬇️ Export Options → Save outputs as TXT/PDF
 
-Bonus Features (beyond hackathon scope):
+Bonus Features (beyond hackathon scope)
 
 📖 Story Mode
 💡 Motivation Mode
@@ -55,6 +55,7 @@ cd genai-multimode-chatbot
 
 
 Create & activate virtual environment:
+
 Windows
 
 python -m venv venv
@@ -89,13 +90,13 @@ streamlit run app.py
 Upload a legal document (PDF/TXT), get a simplified summary, ask questions, and export results as TXT or PDF.
 Explore optional modes: Story, Motivation, Translate, Free Chat.
 
-👨‍💻 Author
+👤 Author
 
 Narayan Gupta
 🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
 💡 Interests: AI, NLP, Generative AI
 
-🔗 LinkedIn
+🌐 LinkedIn
  | GitHub
  | Project Repo
 
