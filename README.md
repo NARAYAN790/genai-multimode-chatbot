@@ -1,51 +1,40 @@
-⚖️ GenAI Legal Document Assistant
+⚖️ Generative AI for Demystifying Legal Documents
 
-A Generative AI Hackathon Project built with Google Gemini API + Streamlit
+A GenAI Hackathon Project built with Google Gemini API + Streamlit
 
-🚨 Problem
+🚨 Problem Statement
 
-Legal documents — rental agreements, loan contracts, terms of service — are often full of jargon and complexity.
-Most people sign without fully understanding the terms, creating risk and confusion.
+Legal documents — rental agreements, loan contracts, terms of service — are full of complex jargon.
+Most people sign them without fully understanding the terms, creating risk and potential legal issues for individuals and small businesses.
 
-💡 Solution
+💡 Our Solution
 
-We built an AI-powered assistant that transforms complex legal documents into clear, plain language.
+We built an AI-powered assistant that transforms legal documents into clear, plain language.
 
-With our app, users can:
+Users can:
 
-Upload contracts or agreements (PDF/TXT)
+📂 Upload contracts or agreements (PDF/TXT)
+📑 Get plain-language summaries of key points
+❓ Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”)
+⬇️ Export results to TXT/PDF
 
-Get plain-language summaries of key points
-
-Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”)
-
-Export results to TXT/PDF for easy reference
-
-This empowers individuals and small businesses to make informed decisions and avoid hidden risks.
+This helps everyday users make informed decisions and avoid hidden risks.
 
 ✨ Core Features
 
-Document Summarizer → Upload PDF/TXT, get simplified summaries
+📑 Document Summarizer → Upload PDF/TXT, get simplified summaries
+❓ Document Q&A → Ask questions about clauses, receive clear answers
+⬇️ Export Options → Save outputs as TXT/PDF
 
-Document Q&A → Ask questions about clauses, receive clear answers
+Bonus Features (beyond hackathon scope):
 
-Export Options → Save outputs as TXT/PDF
-
-Bonus Features (beyond hackathon scope)
-
-Story Mode
-
-Motivation Mode
-
-Translate Mode (English ↔ Hindi)
-
-Summarize Any Text
-
-Free Chat Mode
+📖 Story Mode
+💡 Motivation Mode
+🌐 Translate Mode (English ↔ Hindi)
+📝 Summarize Any Text
+💬 Free Chat Mode
 
 🛠️ Tech Stack
-
-Python 3.10+
 
 Streamlit → UI framework
 
@@ -55,20 +44,36 @@ PyPDF2 → PDF text extraction
 
 FPDF → Export to PDF
 
+Python 3.10+
+
 🚀 Run Locally
+
+Clone the repository:
+
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
 cd genai-multimode-chatbot
 
-# Create & activate virtual environment
-python -m venv venv
-venv\Scripts\activate   # Windows
-source venv/bin/activate  # Mac/Linux
 
-# Install dependencies
+Create & activate virtual environment:
+Windows
+
+python -m venv venv
+venv\Scripts\activate
+
+
+Mac/Linux
+
+python -m venv venv
+source venv/bin/activate
+
+
+Install dependencies:
+
 pip install -r requirements.txt
 
 
-Add your Gemini API key in .streamlit/secrets.toml:
+Add your Gemini API key:
+Create/edit .streamlit/secrets.toml
 
 GEMINI_API_KEY = "your-api-key-here"
 
@@ -76,31 +81,31 @@ GEMINI_API_KEY = "your-api-key-here"
 Run the app:
 
 streamlit run app.py
-## 🌐 Live Demo
-[Try the App Here]
-(https://pranay-ai-assistant.streamlit.app/)
 
-🏆 Judge Walkthrough
+🌐 Live Demo
 
-Upload a rental agreement (PDF/TXT)
+👉 Try the App Here
 
-View the simplified summary
+Upload a legal document (PDF/TXT), get a simplified summary, ask questions, and export results as TXT or PDF.
+Explore optional modes: Story, Motivation, Translate, Free Chat.
 
-Ask: “What is the penalty clause?” → Receive a clear explanation
+👨‍💻 Author
 
-Export results as TXT/PDF
+Narayan Gupta
+🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
+💡 Interests: AI, NLP, Generative AI
 
-(Optional) Explore Story, Motivation, or Translate modes
+🔗 LinkedIn
+ | GitHub
+ | Project Repo
 
-🖼️ Screenshots
+🔮 Future Scope
 
-Document Summarizer
-
-Q&A Mode
-
-Ensure the screenshots/ folder exists in your repo and filenames match exactly (case-sensitive).
-
-🔮 Future Scope (Google Cloud Tools)
+✨ Expand language support to more Indian languages (beyond English & Hindi)
+✨ Add speech-to-text for voice-based queries on contracts
+✨ Build real-time collaboration for multi-user contract review
+✨ Integrate with e-sign platforms for instant contract verification
+✨ Create compliance-check mode for startups & businesses
 
 While this project primarily uses Google Gemini API for summarization and Q&A, it can be extended with other Google Cloud AI tools:
 
@@ -110,20 +115,8 @@ Gemma → Lightweight on-device deployment for privacy-sensitive use cases
 
 Gemini Code Assist → Automate contract-related workflows and compliance checks
 
-This makes the solution future-ready and aligned with the GenAI Exchange Hackathon vision.
+🏆 Acknowledgements
 
-👤 Author
+Hackathon organized by Google & Hack2Skill
 
-Narayan Gupta
-🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
-💡 Interests: AI, NLP, Generative AI
-
-[LinkedIn](https://www.linkedin.com/in/narayan-gupta-19903028b) 
-| [GitHub](https://github.com/NARAYAN790) 
-| [Project Repo](https://github.com/NARAYAN790/genai-multimode-chatbot)
-
-🙏 Acknowledgements
-
-Hackathon by Google & Hack2Skill
-
-Powered by Gemini API + Streamlit
+Powered by Google Gemini API + Streamlit
