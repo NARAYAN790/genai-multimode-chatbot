@@ -1,133 +1,115 @@
-⚖️ Generative AI for Demystifying Legal Documents
+⚖️ **Generative AI for Demystifying Legal Documents**  
 
-A GenAI Hackathon Project built with Google Gemini API + Streamlit
+A GenAI Hackathon Project built with **Google Gemini API + Streamlit**  
 
-🚨 Problem Statement
+---
 
-Legal documents — rental agreements, loan contracts, terms of service — are often full of jargon and complexity. Most people sign without fully understanding the terms, creating risk and confusion.
+🚨 **Problem Statement**  
+Legal documents—like rental agreements, loan contracts, or terms of service—are full of complex jargon. Most people agree to these terms without fully understanding them, creating risk and potential legal issues.  
 
-💡 Our Solution
+---
 
-We built an AI-powered assistant that transforms complex legal documents into clear, plain language.
+💡 **Our Solution**  
+We built an **AI-powered assistant** that transforms legal documents into clear, accessible language.  
 
-Users can:
+Users can:  
+📂 Upload contracts or agreements  
+📑 Get plain-language summaries of key points  
+❓ Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”)  
+⬇️ Export results to PDF or TXT for easy reference  
 
-📂 Upload contracts or agreements (PDF/TXT)
+This empowers everyday citizens and small businesses to make informed decisions and avoid hidden risks.  
 
-📑 Get plain-language summaries of key points
+---
 
-❓ Ask specific questions (e.g., “What’s the penalty clause if I break the lease?”)
+✨ **Core Features**  
+📑 Document Summarizer → Upload PDF/TXT, receive simplified summaries  
+❓ Document Q&A → Ask questions about clauses and get clear explanations  
+⬇️ Export Options → Save outputs as TXT or PDF  
 
-⬇️ Export results to TXT/PDF
+🔮 **Bonus Features (future scope):**  
+📖 Story Mode  
+💡 Motivation Mode  
+🌐 Translate Mode (English ↔ Hindi)  
+📝 Summarize Any Text  
+💬 Free Chat Mode  
 
-This helps everyday users make informed decisions and avoid hidden risks.
+---
 
-✨ Core Features
-Feature	Description
-📑 Document Summarizer	Upload PDF/TXT, get simplified summaries
-❓ Document Q&A	Ask questions about clauses, receive clear answers
-⬇️ Export Options	Save outputs as TXT/PDF
+🛠️ **Tech Stack**  
+⚡ Streamlit → UI Framework  
+🤖 Google Gemini API → AI backend  
+📄 PyPDF2 → PDF text extraction  
+🖨️ FPDF → Export to PDF  
+🐍 Python 3.10+  
 
-Bonus Features (beyond hackathon scope):
+---
 
-📖 Story Mode
+🚀 **Run Locally & Setup**  
 
-💡 Motivation Mode
-
-🌐 Translate Mode (English ↔ Hindi)
-
-📝 Summarize Any Text
-
-💬 Free Chat Mode
-
-🛠️ Tech Stack
-
-Streamlit → UI framework
-
-Google Gemini API → AI backend
-
-PyPDF2 → PDF text extraction
-
-FPDF → Export to PDF
-
-Python 3.10+
-
-🚀 Run Locally
-
-💻 Steps:
-
-Clone the repository
-
+```
+🟢 Step 1: Clone the repository
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
+
+
+🔵 Step 2: Navigate into project folder
 cd genai-multimode-chatbot
 
 
-Create & activate virtual environment
-
-Windows:
-
+🟣 Step 3: Create a virtual environment
 python -m venv venv
-venv\Scripts\activate
 
 
-Mac/Linux:
+🟠 Step 4: Activate the environment
+Windows: venv\Scripts\activate
+Mac/Linux: source venv/bin/activate
 
-python -m venv venv
-source venv/bin/activate
 
-
-Install dependencies
-
+🟡 Step 5: Install dependencies
 pip install -r requirements.txt
 
-🔑 Add Your Gemini API Key
 
-⚙️ Setup:
-
-Create or edit the .streamlit/secrets.toml file:
-
+🔴 Step 6: Add your API key
+Create/Edit .streamlit/secrets.toml and add:
 GEMINI_API_KEY = "your-api-key-here"
 
-▶️ Run the App
+
+⚫ Step 7: Run the Streamlit app
 streamlit run app.py
+```
 
-🌐 Live Demo
+---
 
-🚀 Live App
+🌐 **Live Demo**  
+👉 [Try the App Here](https://pranay-ai-assistant.streamlit.app/)  
 
-🔮 Future Scope
+---
 
-✨ Expand language support to more Indian languages
+🧭 **Judge Walkthrough**  
+1️⃣ Upload a rental agreement (PDF/TXT)  
+2️⃣ View a simplified summary in plain language  
+3️⃣ Ask: *“What is the penalty clause?”* → Get a clear explanation  
+4️⃣ Export the results as PDF/TXT  
+5️⃣ (Optional) Explore Story, Motivation, or Translate modes  
 
-✨ Add speech-to-text for voice-based queries on contracts
+---
 
-✨ Build real-time collaboration for multi-user contract review
+💡 **Future Extensions**  
+☁️ Vertex AI → Scale to handle larger datasets and enterprise deployments  
+📱 Gemma → Lightweight on-device deployment for privacy-sensitive use cases  
+🛠️ Gemini Code Assist → Automate contract-related workflows and compliance checks  
 
-✨ Integrate with e-sign platforms for instant contract verification
+---
 
-✨ Create compliance-check mode for startups & businesses
+👨‍💻 **Author**  
+Narayan Gupta  
+🎓 B.Tech in Electronics & Communication – Dr. A.I.T.D Kanpur  
+💡 Interests: AI, NLP, Data Science, Generative AI  
 
-Additional Google Cloud AI tools:
+🌐 [LinkedIn](https://www.linkedin.com/in/narayan-gupta-19903028b) | 🌐 [GitHub](https://github.com/NARAYAN790) | 🌐 [Project Repo](https://github.com/NARAYAN790/genai-multimode-chatbot)  
 
-Vertex AI → Scale for larger datasets & enterprise use
+---
 
-Gemma → Lightweight on-device deployment for privacy-sensitive use cases
-
-Gemini Code Assist → Automate contract workflows & compliance checks
-
-👤 Author
-
-Narayan Gupta
-🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
-💡 Interests: AI, NLP, Generative AI
-
-🌐 🔗 LinkedIn
-
-🌐 🐙 GitHub
-
-🌐 📁 Project Repo
-
-🏆 Acknowledgements
-
-Hackathon organized by Google & Hack2Skill
-Powered by Google Gemini API + Streamlit
+🏆 **Acknowledgements**  
+Hackathon by **Google & Hack2Skill**  
+Powered by **Google Gemini API + Streamlit**  
