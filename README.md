@@ -53,25 +53,38 @@ FPDF → Export to PDF
 Python 3.10+
 
 🚀 Run Locally
-# Clone the repository
+
+💻 Steps:
+
+Clone the repository
+
 git clone https://github.com/NARAYAN790/genai-multimode-chatbot.git
 cd genai-multimode-chatbot
 
-# Create & activate virtual environment
-# Windows
+
+Create & activate virtual environment
+
+Windows:
+
 python -m venv venv
 venv\Scripts\activate
 
-# Mac/Linux
+
+Mac/Linux:
+
 python -m venv venv
 source venv/bin/activate
 
-# Install dependencies
+
+Install dependencies
+
 pip install -r requirements.txt
 
 🔑 Add Your Gemini API Key
 
-Create or edit .streamlit/secrets.toml file:
+⚙️ Setup:
+
+Create or edit the .streamlit/secrets.toml file:
 
 GEMINI_API_KEY = "your-api-key-here"
 
