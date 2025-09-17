@@ -93,7 +93,7 @@ streamlit run app.py
 
 🌐 Live Demo
 
-👉 Try the App Here: Live App
+👉 Try the App Here: https://pranay-ai-assistant.streamlit.app/
 
 Upload a legal document (PDF/TXT), get a simplified summary, ask questions, and export results as TXT or PDF. Explore optional modes: Story, Motivation, Translate, Free Chat.
 
@@ -103,9 +103,9 @@ Narayan Gupta
 🎓 B.Tech, Electronics & Communication – Dr. A.I.T.D, Kanpur
 💡 Interests: AI, NLP, Generative AI
 
-🌐 LinkedIn
- | GitHub
- | Project Repo
+🌐 LinkedIn:https://www.linkedin.com/in/narayan-gupta-19903028b
+ | GitHub:https://github.com/NARAYAN790
+ | Project Repo:https://github.com/NARAYAN790/genai-multimode-chatbot
 
 🔮 Future Scope
 
@@ -130,4 +130,4 @@ Gemini Code Assist → Automate contract workflows & compliance checks
 🏆 Acknowledgements
 
 Hackathon organized by Google & Hack2Skill
-Powered by Google Gemini API + Streamlit
+Powered by Google Gemini API + Streamli
